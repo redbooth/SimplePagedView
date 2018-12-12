@@ -18,9 +18,9 @@ A PageViewController replacement built to be as simple as possible to use. Suppo
   s.platform     = :ios, "12.0"
 
 
-  s.source       = { :git => "https://github.com/redbooth/SimplePagedView.git", :tag => "0.0.1" }
+  s.source       = { :git => "https://github.com/redbooth/SimplePagedView.git", :tag => s.version }
 
-  s.source_files = "Source"
+  s.source_files = "SimplePagedViewFramework/**/*{swift}"
 
   s.swift_version = "4.2"
 

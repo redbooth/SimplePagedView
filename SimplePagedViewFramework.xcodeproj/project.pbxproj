@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		B2C6870F21C191F2000031AB /* SimplePagedViewFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2C6870521C191F2000031AB /* SimplePagedViewFramework.framework */; };
 		B2C6871421C191F2000031AB /* SimplePagedViewFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6871321C191F2000031AB /* SimplePagedViewFrameworkTests.swift */; };
-		B2C6871621C191F2000031AB /* SimplePagedViewFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C6870821C191F2000031AB /* SimplePagedViewFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872021C19217000031AB /* NSLayoutConstraint.swift */; };
 		B2C6872921C19218000031AB /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872121C19217000031AB /* UIImage.swift */; };
 		B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */; };
@@ -28,7 +27,6 @@
 
 /* Begin PBXFileReference section */
 		B2C6870521C191F2000031AB /* SimplePagedViewFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimplePagedViewFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2C6870821C191F2000031AB /* SimplePagedViewFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimplePagedViewFramework.h; sourceTree = "<group>"; };
 		B2C6870921C191F2000031AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2C6870E21C191F2000031AB /* SimplePagedViewFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimplePagedViewFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2C6871321C191F2000031AB /* SimplePagedViewFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePagedViewFrameworkTests.swift; sourceTree = "<group>"; };
@@ -80,7 +78,6 @@
 			isa = PBXGroup;
 			children = (
 				B2C6872F21C1A8C8000031AB /* Source */,
-				B2C6870821C191F2000031AB /* SimplePagedViewFramework.h */,
 				B2C6870921C191F2000031AB /* Info.plist */,
 			);
 			path = SimplePagedViewFramework;
@@ -129,7 +126,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2C6871621C191F2000031AB /* SimplePagedViewFramework.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
