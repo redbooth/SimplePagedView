@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name         = "SimplePagedView"
   s.version      = "0.0.1"
-  s.summary      = "A PageViewController replacement built to be as simple as possible to use"
+  s.summary      = "A PageViewController replacement built to be as simple as possible"
 
   s.description  = <<-DESC
 A PageViewController replacement built to be as simple as possible to use. Supports easy insertion of views and the classic page dots. Also supports many customization points alongside reasonable defaults.
