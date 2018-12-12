@@ -20,7 +20,7 @@ A PageViewController replacement built to be as simple as possible to use. Suppo
 
   s.source       = { :git => "https://github.com/redbooth/SimplePagedView.git", :tag => "0.0.1" }
 
-  s.source_files = "SimplePagedViewFramework"
+  s.source_files = "Source"
 
   s.swift_version = "4.2"
 

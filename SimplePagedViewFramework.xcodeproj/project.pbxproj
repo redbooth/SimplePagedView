@@ -79,9 +79,7 @@
 		B2C6870721C191F2000031AB /* SimplePagedViewFramework */ = {
 			isa = PBXGroup;
 			children = (
-				B2C6871F21C19217000031AB /* Extensions */,
-				B2C6872321C19217000031AB /* Helpers */,
-				B2C6872521C19218000031AB /* SimplePagedView.swift */,
+				B2C6872F21C1A8C8000031AB /* Source */,
 				B2C6870821C191F2000031AB /* SimplePagedViewFramework.h */,
 				B2C6870921C191F2000031AB /* Info.plist */,
 			);
@@ -112,6 +110,16 @@
 				B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		B2C6872F21C1A8C8000031AB /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				B2C6872521C19218000031AB /* SimplePagedView.swift */,
+				B2C6872321C19217000031AB /* Helpers */,
+				B2C6871F21C19217000031AB /* Extensions */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

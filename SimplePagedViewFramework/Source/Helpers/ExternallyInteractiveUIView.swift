@@ -4,8 +4,8 @@ import UIKit
 // This subclass and override remedies that.
 // We're using it because there are situations (kanban view) where we want the page
 // indicator to be outside the page view
-class ExternallyInteractiveUIView: UIView {
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+public class ExternallyInteractiveUIView: UIView {
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard !clipsToBounds && !isHidden && alpha > 0 else { return nil }
         for member in subviews.reversed() {
             let subPoint = member.convert(point, from: self)

@@ -1,6 +1,6 @@
 import UIKit
 
-extension NSLayoutConstraint {
+public extension NSLayoutConstraint {
 
     /* Convenience method that activates each constraint in the list of arrays, in the same manner as setting
      active=YES. This is often more efficient than activating each constraint individually. */
