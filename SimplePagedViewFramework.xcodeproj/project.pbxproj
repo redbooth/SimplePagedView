@@ -13,6 +13,7 @@
 		B2C6872921C19218000031AB /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872121C19217000031AB /* UIImage.swift */; };
 		B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */; };
 		B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872521C19218000031AB /* SimplePagedView.swift */; };
+		B2C6873121C1AE10000031AB /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6873021C1AE10000031AB /* UIViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		B2C6872121C19217000031AB /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternallyInteractiveUIView.swift; sourceTree = "<group>"; };
 		B2C6872521C19218000031AB /* SimplePagedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePagedView.swift; sourceTree = "<group>"; };
+		B2C6873021C1AE10000031AB /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			children = (
 				B2C6872021C19217000031AB /* NSLayoutConstraint.swift */,
 				B2C6872121C19217000031AB /* UIImage.swift */,
+				B2C6873021C1AE10000031AB /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 				B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */,
 				B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */,
 				B2C6872921C19218000031AB /* UIImage.swift in Sources */,
+				B2C6873121C1AE10000031AB /* UIViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

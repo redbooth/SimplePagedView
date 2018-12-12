@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SimplePagedView"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "A PageViewController replacement built to be as simple as possible"
 
   s.description  = <<-DESC
