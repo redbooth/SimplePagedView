@@ -10,6 +10,10 @@
 		B2C6870F21C191F2000031AB /* SimplePagedViewFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2C6870521C191F2000031AB /* SimplePagedViewFramework.framework */; };
 		B2C6871421C191F2000031AB /* SimplePagedViewFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6871321C191F2000031AB /* SimplePagedViewFrameworkTests.swift */; };
 		B2C6871621C191F2000031AB /* SimplePagedViewFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C6870821C191F2000031AB /* SimplePagedViewFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872021C19217000031AB /* NSLayoutConstraint.swift */; };
+		B2C6872921C19218000031AB /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872121C19217000031AB /* UIImage.swift */; };
+		B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */; };
+		B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872521C19218000031AB /* SimplePagedView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +33,10 @@
 		B2C6870E21C191F2000031AB /* SimplePagedViewFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimplePagedViewFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2C6871321C191F2000031AB /* SimplePagedViewFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePagedViewFrameworkTests.swift; sourceTree = "<group>"; };
 		B2C6871521C191F2000031AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2C6872021C19217000031AB /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		B2C6872121C19217000031AB /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternallyInteractiveUIView.swift; sourceTree = "<group>"; };
+		B2C6872521C19218000031AB /* SimplePagedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePagedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,9 @@
 		B2C6870721C191F2000031AB /* SimplePagedViewFramework */ = {
 			isa = PBXGroup;
 			children = (
+				B2C6871F21C19217000031AB /* Extensions */,
+				B2C6872321C19217000031AB /* Helpers */,
+				B2C6872521C19218000031AB /* SimplePagedView.swift */,
 				B2C6870821C191F2000031AB /* SimplePagedViewFramework.h */,
 				B2C6870921C191F2000031AB /* Info.plist */,
 			);
@@ -84,6 +95,23 @@
 				B2C6871521C191F2000031AB /* Info.plist */,
 			);
 			path = SimplePagedViewFrameworkTests;
+			sourceTree = "<group>";
+		};
+		B2C6871F21C19217000031AB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B2C6872021C19217000031AB /* NSLayoutConstraint.swift */,
+				B2C6872121C19217000031AB /* UIImage.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B2C6872321C19217000031AB /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +176,7 @@
 				TargetAttributes = {
 					B2C6870421C191F2000031AB = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 					B2C6870D21C191F2000031AB = {
 						CreatedOnToolsVersion = 10.1;
@@ -194,6 +223,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */,
+				B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */,
+				B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */,
+				B2C6872921C19218000031AB /* UIImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +374,7 @@
 		B2C6871A21C191F2000031AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -357,6 +391,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.twof.SimplePagedViewFramework;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -365,6 +400,7 @@
 		B2C6871B21C191F2000031AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -389,6 +425,7 @@
 		B2C6871D21C191F2000031AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SimplePagedViewFrameworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -406,6 +443,7 @@
 		B2C6871E21C191F2000031AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SimplePagedViewFrameworkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
