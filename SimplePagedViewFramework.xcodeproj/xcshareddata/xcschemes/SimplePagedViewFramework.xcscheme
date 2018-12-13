@@ -20,6 +20,20 @@
                ReferencedContainer = "container:SimplePagedViewFramework.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B2C6870D21C191F2000031AB"
+               BuildableName = "SimplePagedViewFrameworkTests.xctest"
+               BlueprintName = "SimplePagedViewFrameworkTests"
+               ReferencedContainer = "container:SimplePagedViewFramework.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
