@@ -9,8 +9,10 @@ extension UIViewController {
     }
 
     /// Adds a subViewController and constraints to self
-    func add(_ childViewController: UIViewController,
-             constraints: (UIView) -> [NSLayoutConstraint]) {
+    func add(
+        _ childViewController: UIViewController,
+        constraints: (UIView) -> [NSLayoutConstraint]
+    ) {
         addChild(childViewController)
         view.addSubview(childViewController.view)
         childViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -20,9 +22,8 @@ extension UIViewController {
 
     /// Removes a child ViewController
     func removeFromParent() {
-        guard parent != nil else {
-            return
-        }
+        guard parent != nil else { return }
+
         willMove(toParent: nil)
         removeFromParent()
         view.removeFromSuperview()

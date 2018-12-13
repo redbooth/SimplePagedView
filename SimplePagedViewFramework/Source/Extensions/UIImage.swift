@@ -3,6 +3,10 @@ import UIKit
 
 public extension UIImage {
 
+    /// Creates a tinted copy of a template asset
+    ///
+    /// - Parameter color: The color to set the image to
+    /// - Returns: A tinted copy of self
     func tint(with color: UIColor) -> UIImage {
         guard let cgImage = cgImage else {
             return self

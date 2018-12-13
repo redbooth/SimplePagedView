@@ -27,8 +27,23 @@ public class SimplePagedView: UIViewController {
         static let pageControllerSpacing: CGFloat = -10
     }
 
+    fileprivate var scrollContentView: UIView = {
+        var scrollingView = UIView()
+        scrollingView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollingView
+    }()
+    fileprivate var innerPages: [UIView]!
+    fileprivate let pageControlConstraints: (SimplePagedView) -> ([NSLayoutConstraint])
+    fileprivate let initialPage: Int
+    fileprivate var didInit = false
+    fileprivate let dotSize: CGFloat
+
+
+    /// Can be defined in order to trigger an action when pages are switched. Pages are 0 indexed.
     public var didSwitchPages: ((Int) -> Void)?
+    /// Can be set to allow or disallow user interaction with the page dot indicators. Defaults to false.
     public var pageIndicatorIsInteractive: Bool = false
+    /// The last dot can in the page indicator can be replaced with an image by setting this property
     public var lastPageIndicator: UIImageView?
 
     public var scrollView: UIScrollView = {
@@ -49,21 +64,11 @@ public class SimplePagedView: UIViewController {
         pageControl.currentPageIndicatorTintColor = #colorLiteral(red: 0.937254902, green: 0.2392156863, blue: 0.3098039216, alpha: 1)
         pageControl.isUserInteractionEnabled = true
         return pageControl
-        }() {
+    }() {
         didSet {
             self.viewDidLayoutSubviews()
         }
     }
-    fileprivate var scrollContentView: UIView = {
-        var scrollingView = UIView()
-        scrollingView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollingView
-    }()
-    fileprivate var innerPages: [UIView]!
-    fileprivate let pageControlConstraints: (SimplePagedView) -> ([NSLayoutConstraint])
-    fileprivate let initialPage: Int
-    fileprivate var didInit = false
-    fileprivate let dotSize: CGFloat
 
     init(
         indicatorColor: UIColor = .red,
@@ -71,9 +76,9 @@ public class SimplePagedView: UIViewController {
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
         pageControlConstraints: @escaping (SimplePagedView) -> ([NSLayoutConstraint])
-        = SimplePagedView.defaultPageControlConstraints,
+            = SimplePagedView.defaultPageControlConstraints,
         with views: UIView...
-        ) {
+    ) {
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
@@ -89,9 +94,9 @@ public class SimplePagedView: UIViewController {
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
         pageControlConstraints: @escaping (SimplePagedView) -> ([NSLayoutConstraint])
-        = SimplePagedView.defaultPageControlConstraints,
+            = SimplePagedView.defaultPageControlConstraints,
         with views: [UIView]
-        ) {
+    ) {
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
@@ -124,10 +129,6 @@ public class SimplePagedView: UIViewController {
 
         self.setupGestures()
         self.viewDidLayoutSubviews()
-    }
-
-    override public func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     override public func viewDidLayoutSubviews() {
@@ -173,6 +174,11 @@ public class SimplePagedView: UIViewController {
         }
     }
 
+    /// Scrolls to the given page
+    ///
+    /// - Parameters:
+    ///   - page: <#page description#>
+    ///   - animated: <#animated description#>
     public func scrollTo(page: Int, animated: Bool) {
         self.scrollView.setContentOffset(
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
