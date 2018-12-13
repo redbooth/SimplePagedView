@@ -2,7 +2,7 @@
 
 SimplePagedView is an iOS component that makes it as easy as possible to set up a page view for things like onboarding or presenting information.
 
-()[image here]
+![simulator screen shot - iphone 8 - 2018-12-12 at 12 54 46](https://user-images.githubusercontent.com/5561501/49899079-87bbda80-fe0f-11e8-82ec-ea523e6cd42c.png)
 
 ## Installation
 
