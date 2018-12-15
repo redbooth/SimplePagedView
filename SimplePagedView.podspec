@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SimplePagedView"
-  s.version      = "0.0.2"
+  s.version      = "1.0.1"
   s.summary      = "A PageViewController replacement built to be as simple as possible"
 
   s.description  = <<-DESC
@@ -15,7 +15,7 @@ A PageViewController replacement built to be as simple as possible to use. Suppo
   s.author             = { "Alex Reilly" => "alexander.r.reilly@gmail.com" }
   s.social_media_url   = "https://twitter.com/TheWisestFools"
 
-  s.platform     = :ios, "12.0"
+  s.platform     = :ios, "10.3"
 
 
   s.source       = { :git => "https://github.com/redbooth/SimplePagedView.git", :tag => s.version }
