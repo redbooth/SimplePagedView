@@ -3,7 +3,7 @@ import UIKit
 public class SimplePagedView: UIViewController {
 
     // MARK: - Properties
-    private static let defaultPageControlConstraints: (SimplePagedView) -> ([NSLayoutConstraint])
+    public static let defaultPageControlConstraints: (SimplePagedView) -> ([NSLayoutConstraint])
         = { (pagedViewController: SimplePagedView) in
             return [
                 pagedViewController.pageControl.bottomAnchor.constraint(
@@ -22,7 +22,7 @@ public class SimplePagedView: UIViewController {
             ]
     }
 
-    private enum Constants {
+    fileprivate enum Constants {
         static let startingPage = 0
         static let pageControllerSpacing: CGFloat = -10
     }
@@ -70,7 +70,7 @@ public class SimplePagedView: UIViewController {
         }
     }
 
-    init(
+    public init(
         indicatorColor: UIColor = .red,
         pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
@@ -88,7 +88,7 @@ public class SimplePagedView: UIViewController {
         self.pageControl.backgroundColor = pageControlBackgroundColor
     }
 
-    init(
+    public init(
         indicatorColor: UIColor = .red,
         pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
@@ -177,8 +177,8 @@ public class SimplePagedView: UIViewController {
     /// Scrolls to the given page
     ///
     /// - Parameters:
-    ///   - page: <#page description#>
-    ///   - animated: <#animated description#>
+    ///   - page: 0 indexed page number
+    ///   - animated: should the scrolling be animated
     public func scrollTo(page: Int, animated: Bool) {
         self.scrollView.setContentOffset(
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
@@ -205,7 +205,7 @@ public class SimplePagedView: UIViewController {
 // MARK: - View Setup
 fileprivate extension SimplePagedView {
 
-    fileprivate func setupInnerPages(for views: [UIView]) -> [UIView] {
+    func setupInnerPages(for views: [UIView]) -> [UIView] {
         if views.count == 0 {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -216,7 +216,7 @@ fileprivate extension SimplePagedView {
         return views.map { $0.translatesAutoresizingMaskIntoConstraints = false; return $0 }
     }
 
-    fileprivate func setupGestures() {
+    func setupGestures() {
         if pageIndicatorIsInteractive {
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panned(sender:)))
 
@@ -227,7 +227,7 @@ fileprivate extension SimplePagedView {
         }
     }
 
-    fileprivate func setupSubviews() {
+    func setupSubviews() {
         let customView = ExternallyInteractiveUIView(frame: self.view.frame)
         self.view = customView
 
@@ -243,7 +243,7 @@ fileprivate extension SimplePagedView {
     }
 
     // swiftlint:disable next function_body_length
-    fileprivate func setupConstraints() {
+    func setupConstraints() {
         let scrollViewConstraints = [
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
