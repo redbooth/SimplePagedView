@@ -12,8 +12,8 @@ let orange = UIView()
 orange.backgroundColor = .orange
 
 let pagedView = SimplePagedView(
-    indicatorColor: .cyan,
-    dotSize: 20,
+//    indicatorColor: .cyan,
+//    dotSize: 20,
     with: green, red, orange
 )
 

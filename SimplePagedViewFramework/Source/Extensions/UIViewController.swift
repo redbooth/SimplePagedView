@@ -1,15 +1,15 @@
 import UIKit
 
-extension UIViewController {
+public extension UIViewController {
     /// Adds a child ViewController
-    func add(_ child: UIViewController) {
+    public func add(_ child: UIViewController) {
         addChild(child)
         view.addSubview(child.view)
         child.didMove(toParent: self)
     }
 
     /// Adds a subViewController and constraints to self
-    func add(
+    public func add(
         _ childViewController: UIViewController,
         constraints: (UIView) -> [NSLayoutConstraint]
     ) {
@@ -21,7 +21,7 @@ extension UIViewController {
     }
 
     /// Removes a child ViewController
-    func removeFromParent() {
+    public func removeFromParent() {
         guard parent != nil else { return }
 
         willMove(toParent: nil)

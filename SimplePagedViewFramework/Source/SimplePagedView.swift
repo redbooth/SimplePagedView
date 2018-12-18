@@ -13,12 +13,6 @@ public class SimplePagedView: UIViewController {
                 pagedViewController.pageControl.centerXAnchor.constraint(
                     equalTo: pagedViewController.view.centerXAnchor
                 ),
-                pagedViewController.pageControl.leadingAnchor.constraint(
-                    equalTo: pagedViewController.scrollView.leadingAnchor
-                ),
-                pagedViewController.pageControl.trailingAnchor.constraint(
-                    equalTo: pagedViewController.scrollView.trailingAnchor
-                )
             ]
     }
 
@@ -56,19 +50,11 @@ public class SimplePagedView: UIViewController {
         scrollView.alwaysBounceHorizontal = false
         return scrollView
     }()
-    public var pageControl: UIPageControl = {
-        var pageControl = UIPageControl()
+    public var pageControl: PageDotsView = {
+        var pageControl = PageDotsView(count: 0, frame: .zero)
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.currentPage = Constants.startingPage
-        pageControl.pageIndicatorTintColor = #colorLiteral(red: 0.6980392157, green: 0.6980392157, blue: 0.6980392157, alpha: 1)
-        pageControl.currentPageIndicatorTintColor = #colorLiteral(red: 0.937254902, green: 0.2392156863, blue: 0.3098039216, alpha: 1)
-        pageControl.isUserInteractionEnabled = true
         return pageControl
-    }() {
-        didSet {
-            self.viewDidLayoutSubviews()
-        }
-    }
+    }()
 
     public init(
         indicatorColor: UIColor = .red,
@@ -84,7 +70,15 @@ public class SimplePagedView: UIViewController {
         self.dotSize = dotSize
         super.init(nibName: nil, bundle: nil)
         self.innerPages = setupInnerPages(for: views)
-        self.pageControl.currentPageIndicatorTintColor = indicatorColor
+
+        self.pageControl = setupPageDotsView(
+            numberOfDots: self.innerPages.count,
+            color: .gray,
+            currentColor: indicatorColor,
+            dotSize: dotSize,
+            currentDot: initialPage
+        )
+
         self.pageControl.backgroundColor = pageControlBackgroundColor
     }
 
@@ -102,7 +96,15 @@ public class SimplePagedView: UIViewController {
         self.dotSize = dotSize
         super.init(nibName: nil, bundle: nil)
         self.innerPages = setupInnerPages(for: views)
-        self.pageControl.currentPageIndicatorTintColor = indicatorColor
+
+        self.pageControl = setupPageDotsView(
+            numberOfDots: self.innerPages.count,
+            color: .gray,
+            currentColor: indicatorColor,
+            dotSize: dotSize,
+            currentDot: initialPage
+        )
+
         self.pageControl.backgroundColor = pageControlBackgroundColor
     }
 
@@ -131,48 +133,48 @@ public class SimplePagedView: UIViewController {
         self.viewDidLayoutSubviews()
     }
 
-    override public func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        if !self.didInit {
-            self.didInit = true
-            self.scrollTo(page: self.initialPage, animated: false)
-            self.pageControl.currentPage = self.initialPage
-        }
-
-        var lastFrame: CGRect = self.lastPageIndicator?.frame ?? .zero
-        lastFrame.origin = CGPoint(x: self.pageControl.frame.origin.x, y: self.pageControl.frame.origin.y)
-
-        self.pageControl.subviews.enumerated().forEach { index, subview in
-            let currentFrame = subview.frame
-
-            if let lastPageIndicator = self.lastPageIndicator,
-                (subview as? UIImageView != nil || index == self.pageControl.numberOfPages - 1) {
-                subview.removeFromSuperview()
-                let newFrame = CGRect(
-                    x: lastFrame.origin.x + dotSize + 11,
-                    y: lastFrame.origin.y - (lastPageIndicator.frame.height/2 - dotSize/2),
-                    width: lastPageIndicator.frame.width,
-                    height: lastPageIndicator.frame.height
-                )
-
-                self.lastPageIndicator?.frame = newFrame
-                self.lastPageIndicator?.image = lastPageIndicator.image?.tint(
-                    with: self.pageControl.pageIndicatorTintColor!
-                )
-
-                pageControl.addSubview(self.lastPageIndicator!)
-            } else {
-                subview.frame = CGRect(
-                    x: currentFrame.origin.x,
-                    y: currentFrame.origin.y,
-                    width: dotSize,
-                    height: dotSize
-                )
-                lastFrame = subview.frame
-            }
-        }
-    }
+//    override public func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//
+//        if !self.didInit {
+//            self.didInit = true
+//            self.scrollTo(page: self.initialPage, animated: false)
+//            self.pageControl.currentPage = self.initialPage
+//        }
+//
+//        var lastFrame: CGRect = self.lastPageIndicator?.frame ?? .zero
+//        lastFrame.origin = CGPoint(x: self.pageControl.frame.origin.x, y: self.pageControl.frame.origin.y)
+//
+//        self.pageControl.subviews.enumerated().forEach { index, subview in
+//            let currentFrame = subview.frame
+//
+//            if let lastPageIndicator = self.lastPageIndicator,
+//                (subview as? UIImageView != nil || index == self.pageControl.numberOfPages - 1) {
+//                subview.removeFromSuperview()
+//                let newFrame = CGRect(
+//                    x: lastFrame.origin.x + dotSize + 11,
+//                    y: lastFrame.origin.y - (lastPageIndicator.frame.height/2 - dotSize/2),
+//                    width: lastPageIndicator.frame.width,
+//                    height: lastPageIndicator.frame.height
+//                )
+//
+//                self.lastPageIndicator?.frame = newFrame
+//                self.lastPageIndicator?.image = lastPageIndicator.image?.tint(
+//                    with: self.pageControl.pageIndicatorTintColor!
+//                )
+//
+//                pageControl.addSubview(self.lastPageIndicator!)
+//            } else {
+//                subview.frame = CGRect(
+//                    x: currentFrame.origin.x,
+//                    y: currentFrame.origin.y,
+//                    width: dotSize,
+//                    height: dotSize
+//                )
+//                lastFrame = subview.frame
+//            }
+//        }
+//    }
 
     /// Scrolls to the given page
     ///
@@ -184,16 +186,16 @@ public class SimplePagedView: UIViewController {
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
             animated: animated
         )
-        pageControl.currentPage = page
-        self.viewDidLayoutSubviews()
+        pageControl = try! pageControl.moveTo(index: page)
+//        self.viewDidLayoutSubviews()
     }
 
     @objc func panned(sender: UIPanGestureRecognizer) {
-        let cgNumberOfPages: CGFloat = CGFloat(self.pageControl.numberOfPages)
+        let cgNumberOfPages: CGFloat = CGFloat(self.innerPages.count)
         var page: Int = Int(floor(Double((sender.location(in: self.view).x/pageControl.frame.width) * cgNumberOfPages)))
 
-        page = (page >= pageControl.numberOfPages)
-            ? pageControl.numberOfPages - 1
+        page = (page >= self.innerPages.count)
+            ? self.innerPages.count - 1
             : (page < 0)
             ? 0
             : page
@@ -238,7 +240,7 @@ fileprivate extension SimplePagedView {
             scrollContentView.addSubview(page)
         }
 
-        pageControl.numberOfPages = innerPages.count
+//        pageControl.numberOfPages = innerPages.count
         self.view.addSubview(pageControl)
     }
 
@@ -303,22 +305,33 @@ fileprivate extension SimplePagedView {
             pageConstraints
         )
     }
+
+    func setupPageDotsView(numberOfDots: Int, color: UIColor, currentColor: UIColor, dotSize: CGFloat, currentDot: Int) -> PageDotsView {
+        let view = PageDotsView(count: numberOfDots, dotColor: color, currentDotColor: currentColor, dotSize: dotSize, currentDot: currentDot, frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.accessibilityIdentifier = "PageDotsView"
+
+        view.frame = CGRect(x: 0, y: 0, width: view.intrinsicContentSize.width, height: view.intrinsicContentSize.height)
+
+        return view
+    }
 }
 
 // MARK: - UIScrollViewDelegate Methods
 extension SimplePagedView: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-        self.pageControl.currentPage = page
+        self.pageControl = try! self.pageControl.moveTo(index: page)
+
         self.didSwitchPages?(page)
         self.viewDidLayoutSubviews()
 
-        if let lastPageIndicator = self.lastPageIndicator,
-            self.pageControl.currentPage == self.pageControl.numberOfPages - 1 {
-            self.lastPageIndicator?.image = lastPageIndicator.image?.tint(
-                with: self.pageControl.currentPageIndicatorTintColor!
-            )
-        }
+//        if let lastPageIndicator = self.lastPageIndicator,
+//            self.pageControl.currentPage == self.pageControl.numberOfPages - 1 {
+//            self.lastPageIndicator?.image = lastPageIndicator.image?.tint(
+//                with: self.pageControl.currentPageIndicatorTintColor!
+//            )
+//        }
     }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {

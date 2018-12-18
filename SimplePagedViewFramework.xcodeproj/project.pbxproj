@@ -15,6 +15,7 @@
 		B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872521C19218000031AB /* SimplePagedView.swift */; };
 		B2C6873121C1AE10000031AB /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6873021C1AE10000031AB /* UIViewController.swift */; };
 		B2C6898421C342D5000031AB /* PageDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6898321C342D5000031AB /* PageDotsView.swift */; };
+		B2C6898721C9806F000031AB /* DotsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6898621C9806E000031AB /* DotsError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,6 +25,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = B2C6870421C191F2000031AB;
 			remoteInfo = SimplePagedViewFramework;
+		};
+		B2C689AC21C9993E000031AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B2C689A821C9993B000031AB /* SimplePagedViewExample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B2C6899321C99938000031AB;
+			remoteInfo = SimplePagedViewExample;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -39,6 +47,9 @@
 		B2C6872521C19218000031AB /* SimplePagedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePagedView.swift; sourceTree = "<group>"; };
 		B2C6873021C1AE10000031AB /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		B2C6898321C342D5000031AB /* PageDotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDotsView.swift; sourceTree = "<group>"; };
+		B2C6898621C9806E000031AB /* DotsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotsError.swift; sourceTree = "<group>"; };
+		B2C6898821C987EB000031AB /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B2C689A821C9993B000031AB /* SimplePagedViewExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SimplePagedViewExample.xcodeproj; path = SimplePagedViewExample/SimplePagedViewExample.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +74,7 @@
 		B2C686FB21C191F2000031AB = {
 			isa = PBXGroup;
 			children = (
+				B2C6898821C987EB000031AB /* MyPlayground.playground */,
 				B2C6870721C191F2000031AB /* SimplePagedViewFramework */,
 				B2C6871221C191F2000031AB /* SimplePagedViewFrameworkTests */,
 				B2C6870621C191F2000031AB /* Products */,
@@ -81,6 +93,7 @@
 		B2C6870721C191F2000031AB /* SimplePagedViewFramework */ = {
 			isa = PBXGroup;
 			children = (
+				B2C6898921C998FE000031AB /* Example */,
 				B2C6872F21C1A8C8000031AB /* Source */,
 				B2C6870921C191F2000031AB /* Info.plist */,
 			);
@@ -117,6 +130,7 @@
 		B2C6872F21C1A8C8000031AB /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				B2C6898521C9805B000031AB /* Errors */,
 				B2C6872521C19218000031AB /* SimplePagedView.swift */,
 				B2C6898221C342B6000031AB /* Views */,
 				B2C6872321C19217000031AB /* Helpers */,
@@ -131,6 +145,30 @@
 				B2C6898321C342D5000031AB /* PageDotsView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		B2C6898521C9805B000031AB /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				B2C6898621C9806E000031AB /* DotsError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		B2C6898921C998FE000031AB /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				B2C689A821C9993B000031AB /* SimplePagedViewExample.xcodeproj */,
+			);
+			path = Example;
+			sourceTree = "<group>";
+		};
+		B2C689A921C9993B000031AB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B2C689AD21C9993E000031AB /* SimplePagedViewExample.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +249,12 @@
 			mainGroup = B2C686FB21C191F2000031AB;
 			productRefGroup = B2C6870621C191F2000031AB /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B2C689A921C9993B000031AB /* Products */;
+					ProjectRef = B2C689A821C9993B000031AB /* SimplePagedViewExample.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				B2C6870421C191F2000031AB /* SimplePagedViewFramework */,
@@ -218,6 +262,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		B2C689AD21C9993E000031AB /* SimplePagedViewExample.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = SimplePagedViewExample.app;
+			remoteRef = B2C689AC21C9993E000031AB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B2C6870321C191F2000031AB /* Resources */ = {
@@ -241,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2C6898721C9806F000031AB /* DotsError.swift in Sources */,
 				B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */,
 				B2C6898421C342D5000031AB /* PageDotsView.swift in Sources */,
 				B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */,
