@@ -294,15 +294,15 @@ extension SimplePagedView: UIScrollViewDelegate {
         self.didSwitchPages?(page)
     }
 
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.viewDidLayoutSubviews()
-    }
+//    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        self.viewDidLayoutSubviews()
+//    }
 
     func replace(subview: PageDotsView, with other: PageDotsView, constraints: (PageDotsView, SimplePagedView) -> [NSLayoutConstraint]) {
         let newConstraints = constraints(other, self)
         subview.removeFromSuperview()
 
-        self.view.addSubview(other)
+        self.view.insertSubview(other, belowSubview: self.pageControlGestureView)
         NSLayoutConstraint.activate(newConstraints)
 
         self.pageControl = other
