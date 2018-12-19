@@ -23,11 +23,13 @@ class ViewController: UIViewController {
         let orange = UIView()
         orange.backgroundColor = .orange
 
+        let dotImages = [1: #imageLiteral(resourceName: "add")]
+
         let pagedView = SimplePagedView(
             indicatorColor: .cyan,
-//            pageControlBackgroundColor: .green,
             initialPage: 1,
             dotSize: 10,
+            imageIndices: dotImages,
             with: green, red, orange
         )
         pagedView.pageIndicatorIsInteractive = true

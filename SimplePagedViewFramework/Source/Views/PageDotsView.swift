@@ -1,12 +1,13 @@
 import UIKit
 
 public class PageDotsView: UIView {
-    private var dots: [DotView] = []
+    private var dots: [UIView] = []
     private var dotCount: Int
     private let currentDot: Int
     private let dotSize: CGFloat
     private let dotColor: UIColor
     private let currentDotColor: UIColor
+    private let imageIndices: [Int: UIImage]
 
     private let dotContainer: UIView = {
         let view = UIView(frame: .zero)
@@ -22,6 +23,7 @@ public class PageDotsView: UIView {
         currentDotColor: UIColor = .red,
         dotSize: CGFloat = 7,
         currentDot: Int = 0,
+        imageIndices: [Int: UIImage]=[:],
         frame: CGRect
     ) {
         self.dotCount = count
@@ -29,6 +31,7 @@ public class PageDotsView: UIView {
         self.currentDot = currentDot
         self.dotColor = dotColor
         self.currentDotColor = currentDotColor
+        self.imageIndices = imageIndices
 
         super.init(frame: frame)
 
@@ -36,7 +39,8 @@ public class PageDotsView: UIView {
             count: count,
             dotColor: dotColor,
             currentDotColor: currentDotColor,
-            dotSize: dotSize
+            dotSize: dotSize,
+            imageIndices: imageIndices
         )
         setupConstraints(dotSize: dotSize)
     }
@@ -53,6 +57,7 @@ public class PageDotsView: UIView {
             currentDotColor: self.currentDotColor,
             dotSize: self.dotSize,
             currentDot: self.currentDot + 1,
+            imageIndices: self.imageIndices,
             frame: self.frame
         )
     }
@@ -65,6 +70,7 @@ public class PageDotsView: UIView {
             currentDotColor: self.currentDotColor,
             dotSize: self.dotSize,
             currentDot: self.currentDot - 1,
+            imageIndices: self.imageIndices,
             frame: self.frame
         )
     }
@@ -77,6 +83,7 @@ public class PageDotsView: UIView {
             currentDotColor: self.currentDotColor,
             dotSize: self.dotSize,
             currentDot: index,
+            imageIndices: self.imageIndices,
             frame: self.frame
         )
     }
@@ -93,24 +100,36 @@ private extension PageDotsView {
         count: Int,
         dotColor: UIColor,
         currentDotColor: UIColor,
-        dotSize: CGFloat
-    ) -> [DotView] {
+        dotSize: CGFloat,
+        imageIndices: [Int: UIImage]
+    ) -> [UIView] {
         self.addSubview(dotContainer)
 
         return (0..<count).map { index in
-            let dot = generateDot(
-                index: index,
-                dotColor: dotColor,
-                currentDotColor: currentDotColor,
-                dotSize: dotSize
-            )
-            self.dotContainer.addSubview(dot)
-            return dot
+            if let image = imageIndices[index] {
+                let imageView = prepareImageDot(
+                    image: image,
+                    index: index,
+                    color: dotColor,
+                    currentColor: currentDotColor
+                )
+                self.dotContainer.addSubview(imageView)
+                return imageView
+            } else {
+                let dot = generateDot(
+                    index: index,
+                    dotColor: dotColor,
+                    currentDotColor: currentDotColor,
+                    dotSize: dotSize
+                )
+                self.dotContainer.addSubview(dot)
+                return dot
+            }
         }
     }
 
     func setupConstraints(dotSize: CGFloat) {
-        var previousDot: DotView?
+        var previousDot: UIView?
 
         let dotConstraints = dots.flatMap { (dot) -> [NSLayoutConstraint] in
             var constraints = [
@@ -151,5 +170,21 @@ private extension PageDotsView {
         dot.accessibilityIdentifier = "DotAt\(index)"
 
         return dot
+    }
+
+    func prepareImageDot(
+        image: UIImage,
+        index: Int,
+        color: UIColor,
+        currentColor: UIColor
+    ) -> UIImageView {
+        let imageColor = index == self.currentDot ? currentColor : color
+        let tintedImage = image.tint(with: imageColor)
+
+        let imageView = UIImageView(image: tintedImage)
+        imageView.accessibilityIdentifier = "ImageAt\(index)"
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+
+        return imageView
     }
 }

@@ -40,8 +40,6 @@ public class SimplePagedView: UIViewController {
     fileprivate let initialPage: Int
     fileprivate var didInit = false
     fileprivate let dotSize: CGFloat
-//    fileprivate let pageControlBackgroundColor: UIColor
-
 
     /// Can be defined in order to trigger an action when pages are switched. Pages are 0 indexed.
     public var didSwitchPages: ((Int) -> Void)?
@@ -68,14 +66,13 @@ public class SimplePagedView: UIViewController {
 
     public init(
         indicatorColor: UIColor = .red,
-//        pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
+        imageIndices: [Int: UIImage] = [:],
         pageControlConstraints: @escaping (UIView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: UIView...
     ) {
-//        self.pageControlBackgroundColor = pageControlBackgroundColor
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
@@ -87,7 +84,8 @@ public class SimplePagedView: UIViewController {
             color: .gray,
             currentColor: indicatorColor,
             dotSize: dotSize,
-            currentDot: initialPage
+            currentDot: initialPage,
+            imageIndices: imageIndices
         )
     }
 
@@ -95,6 +93,7 @@ public class SimplePagedView: UIViewController {
         indicatorColor: UIColor = .red,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
+        imageIndices: [Int: UIImage] = [:],
         pageControlConstraints: @escaping (UIView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: [UIView]
@@ -111,7 +110,8 @@ public class SimplePagedView: UIViewController {
             color: .gray,
             currentColor: indicatorColor,
             dotSize: dotSize,
-            currentDot: initialPage
+            currentDot: initialPage,
+            imageIndices: imageIndices
         )
     }
 
@@ -270,8 +270,23 @@ fileprivate extension SimplePagedView {
         )
     }
 
-    func setupPageDotsView(numberOfDots: Int, color: UIColor, currentColor: UIColor, dotSize: CGFloat, currentDot: Int) -> PageDotsView {
-        let view = PageDotsView(count: numberOfDots, dotColor: color, currentDotColor: currentColor, dotSize: dotSize, currentDot: currentDot, frame: .zero)
+    func setupPageDotsView(
+        numberOfDots: Int,
+        color: UIColor,
+        currentColor: UIColor,
+        dotSize: CGFloat,
+        currentDot: Int,
+        imageIndices: [Int: UIImage]
+    ) -> PageDotsView {
+        let view = PageDotsView(
+            count: numberOfDots,
+            dotColor: color,
+            currentDotColor: currentColor,
+            dotSize: dotSize,
+            currentDot: currentDot,
+            imageIndices: imageIndices,
+            frame: .zero
+        )
         view.translatesAutoresizingMaskIntoConstraints = false
         view.accessibilityIdentifier = "PageDotsView"
 
