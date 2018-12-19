@@ -40,6 +40,7 @@ public class SimplePagedView: UIViewController {
     fileprivate let initialPage: Int
     fileprivate var didInit = false
     fileprivate let dotSize: CGFloat
+//    fileprivate let pageControlBackgroundColor: UIColor
 
 
     /// Can be defined in order to trigger an action when pages are switched. Pages are 0 indexed.
@@ -67,13 +68,14 @@ public class SimplePagedView: UIViewController {
 
     public init(
         indicatorColor: UIColor = .red,
-        pageControlBackgroundColor: UIColor = .clear,
+//        pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
         pageControlConstraints: @escaping (UIView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: UIView...
     ) {
+//        self.pageControlBackgroundColor = pageControlBackgroundColor
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
@@ -87,19 +89,17 @@ public class SimplePagedView: UIViewController {
             dotSize: dotSize,
             currentDot: initialPage
         )
-
-        self.pageControl.backgroundColor = pageControlBackgroundColor
     }
 
     public init(
         indicatorColor: UIColor = .red,
-        pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
         pageControlConstraints: @escaping (UIView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: [UIView]
     ) {
+
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
@@ -113,8 +113,6 @@ public class SimplePagedView: UIViewController {
             dotSize: dotSize,
             currentDot: initialPage
         )
-
-        self.pageControl.backgroundColor = pageControlBackgroundColor
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -135,6 +133,7 @@ public class SimplePagedView: UIViewController {
         self.didSwitchPages?(0)
 
         self.setupGestures(pageControl: self.pageControlGestureView)
+        scrollTo(page: self.initialPage, animated: false)
         self.viewDidLayoutSubviews()
     }
 
@@ -204,7 +203,6 @@ fileprivate extension SimplePagedView {
             scrollContentView.addSubview(page)
         }
 
-//        pageControl.numberOfPages = innerPages.count
         self.view.addSubview(pageControl)
         self.view.addSubview(pageControlGestureView)
     }
@@ -293,10 +291,6 @@ extension SimplePagedView: UIScrollViewDelegate {
 
         self.didSwitchPages?(page)
     }
-
-//    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        self.viewDidLayoutSubviews()
-//    }
 
     func replace(subview: PageDotsView, with other: PageDotsView, constraints: (PageDotsView, SimplePagedView) -> [NSLayoutConstraint]) {
         let newConstraints = constraints(other, self)
