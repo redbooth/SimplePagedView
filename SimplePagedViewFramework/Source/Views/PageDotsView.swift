@@ -33,6 +33,14 @@ public class PageDotsView: UIView {
     private let dotColor: UIColor
     private let currentDotColor: UIColor
 
+    private let dotContainer: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.accessibilityIdentifier = "DotContainer"
+
+        return view
+    }()
+
     public init(
         count: Int,
         dotColor: UIColor = .gray,
@@ -112,6 +120,8 @@ private extension PageDotsView {
         currentDotColor: UIColor,
         dotSize: CGFloat
     ) -> [DotView] {
+        self.addSubview(dotContainer)
+
         return (0..<count).map { index in
             let dot = generateDot(
                 index: index,
@@ -119,7 +129,7 @@ private extension PageDotsView {
                 currentDotColor: currentDotColor,
                 dotSize: dotSize
             )
-            self.addSubview(dot)
+            self.dotContainer.addSubview(dot)
             return dot
         }
     }
@@ -128,12 +138,15 @@ private extension PageDotsView {
         var previousDot: DotView?
 
         let dotConstraints = dots.flatMap { (dot) -> [NSLayoutConstraint] in
-            let constraints = [
+            var constraints = [
                 dot.heightAnchor.constraint(equalToConstant: dotSize),
                 dot.widthAnchor.constraint(equalToConstant: dotSize),
-                dot.leadingAnchor.constraint(equalTo: previousDot?.trailingAnchor ?? self.leadingAnchor, constant: previousDot==nil ? 2 : dotSize),
-                dot.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+                dot.centerYAnchor.constraint(equalTo: self.dotContainer.centerYAnchor)
             ]
+
+            if let previousDot = previousDot {
+                constraints.append(dot.leadingAnchor.constraint(equalTo: previousDot.trailingAnchor, constant: dotSize))
+            }
 
             previousDot = dot
 
@@ -141,6 +154,13 @@ private extension PageDotsView {
         }
 
         NSLayoutConstraint.activate(dotConstraints)
+
+        NSLayoutConstraint.activate([
+            dotContainer.widthAnchor.constraint(equalToConstant: self.intrinsicContentSize.width),
+            dotContainer.heightAnchor.constraint(equalToConstant: self.intrinsicContentSize.height),
+            dotContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            dotContainer.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        ])
     }
 
     func generateDot(

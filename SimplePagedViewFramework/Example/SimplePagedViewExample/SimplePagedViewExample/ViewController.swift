@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         orange.backgroundColor = .orange
 
         let pagedView = SimplePagedView(with: green, red, orange)
+        pagedView.pageIndicatorIsInteractive = true
 
         self.add(pagedView) { (child) -> [NSLayoutConstraint] in
             return [
