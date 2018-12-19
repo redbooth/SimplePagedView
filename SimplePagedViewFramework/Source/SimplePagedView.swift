@@ -3,8 +3,8 @@ import UIKit
 public class SimplePagedView: UIViewController {
 
     // MARK: - Properties
-    public static let defaultPageControlConstraints: (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
-        = { (dotsView: PageDotsView, pagedViewController: SimplePagedView) in
+    public static let defaultPageControlConstraints: (UIView, SimplePagedView) -> ([NSLayoutConstraint])
+        = { (dotsView: UIView, pagedViewController: SimplePagedView) in
             return [
                 dotsView.bottomAnchor.constraint(equalTo: pagedViewController.scrollView.bottomAnchor),
                 dotsView.centerXAnchor.constraint(
@@ -27,7 +27,16 @@ public class SimplePagedView: UIViewController {
         return scrollingView
     }()
     fileprivate var innerPages: [UIView]!
-    fileprivate let pageControlConstraints: (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
+    fileprivate var pageControlGestureView: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.accessibilityIdentifier = "DotGestureView"
+
+        return view
+    }()
+
+    fileprivate let pageControlConstraints: (UIView, SimplePagedView) -> ([NSLayoutConstraint])
+
     fileprivate let initialPage: Int
     fileprivate var didInit = false
     fileprivate let dotSize: CGFloat
@@ -61,7 +70,7 @@ public class SimplePagedView: UIViewController {
         pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
-        pageControlConstraints: @escaping (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
+        pageControlConstraints: @escaping (UIView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: UIView...
     ) {
@@ -87,7 +96,7 @@ public class SimplePagedView: UIViewController {
         pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
-        pageControlConstraints: @escaping (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
+        pageControlConstraints: @escaping (UIView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: [UIView]
     ) {
@@ -125,7 +134,7 @@ public class SimplePagedView: UIViewController {
 
         self.didSwitchPages?(0)
 
-        self.setupGestures(pageControl: self.pageControl)
+        self.setupGestures(pageControl: self.pageControlGestureView)
         self.viewDidLayoutSubviews()
     }
 
@@ -146,7 +155,6 @@ public class SimplePagedView: UIViewController {
     }
 
     @objc func panned(sender: UIPanGestureRecognizer) {
-        print("panned")
         let cgNumberOfPages: CGFloat = CGFloat(self.innerPages.count)
         var page: Int = Int(floor(Double((sender.location(in: self.view).x/pageControl.frame.width) * cgNumberOfPages)))
 
@@ -174,7 +182,7 @@ fileprivate extension SimplePagedView {
         return views.map { $0.translatesAutoresizingMaskIntoConstraints = false; return $0 }
     }
 
-    func setupGestures(pageControl: PageDotsView) {
+    func setupGestures(pageControl: UIView) {
         if pageIndicatorIsInteractive {
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panned(sender:)))
 
@@ -198,6 +206,7 @@ fileprivate extension SimplePagedView {
 
 //        pageControl.numberOfPages = innerPages.count
         self.view.addSubview(pageControl)
+        self.view.addSubview(pageControlGestureView)
     }
 
     // swiftlint:disable next function_body_length
@@ -258,6 +267,7 @@ fileprivate extension SimplePagedView {
             scrollViewConstraints,
             innerViewConstraints,
             self.pageControlConstraints(self.pageControl, self),
+            self.pageControlConstraints(self.pageControlGestureView, self),
             pageConstraints
         )
     }
@@ -291,8 +301,6 @@ extension SimplePagedView: UIScrollViewDelegate {
     func replace(subview: PageDotsView, with other: PageDotsView, constraints: (PageDotsView, SimplePagedView) -> [NSLayoutConstraint]) {
         let newConstraints = constraints(other, self)
         subview.removeFromSuperview()
-
-        setupGestures(pageControl: other)
 
         self.view.addSubview(other)
         NSLayoutConstraint.activate(newConstraints)
