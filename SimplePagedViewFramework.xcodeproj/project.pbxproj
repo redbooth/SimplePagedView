@@ -16,6 +16,7 @@
 		B2C6873121C1AE10000031AB /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6873021C1AE10000031AB /* UIViewController.swift */; };
 		B2C6898421C342D5000031AB /* PageDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6898321C342D5000031AB /* PageDotsView.swift */; };
 		B2C6898721C9806F000031AB /* DotsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6898621C9806E000031AB /* DotsError.swift */; };
+		B2C689B221CA12E0000031AB /* DotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C689B121CA12E0000031AB /* DotView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		B2C6898621C9806E000031AB /* DotsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotsError.swift; sourceTree = "<group>"; };
 		B2C6898821C987EB000031AB /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B2C689A821C9993B000031AB /* SimplePagedViewExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SimplePagedViewExample.xcodeproj; path = SimplePagedViewExample/SimplePagedViewExample.xcodeproj; sourceTree = "<group>"; };
+		B2C689B121CA12E0000031AB /* DotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				B2C6898321C342D5000031AB /* PageDotsView.swift */,
+				B2C689B121CA12E0000031AB /* DotView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 			files = (
 				B2C6898721C9806F000031AB /* DotsError.swift in Sources */,
 				B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */,
+				B2C689B221CA12E0000031AB /* DotView.swift in Sources */,
 				B2C6898421C342D5000031AB /* PageDotsView.swift in Sources */,
 				B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */,
 				B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */,
