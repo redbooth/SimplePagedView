@@ -26,9 +26,9 @@ class ViewController: UIViewController {
         let dotImages = [-1: #imageLiteral(resourceName: "add")]
 
         let pagedView = SimplePagedView(
-            indicatorColor: .cyan,
+//            indicatorColor: .cyan,
             initialPage: 1,
-            dotSize: 10,
+            dotSize: 20,
             imageIndices: dotImages,
             with: green, red, orange
         )

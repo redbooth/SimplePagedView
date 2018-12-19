@@ -41,6 +41,10 @@ public class SimplePagedView: UIViewController {
     fileprivate var didInit = false
     fileprivate let dotSize: CGFloat
 
+    public var currentPage: Int {
+        return pageControl.currentDot
+    }
+
     /// Can be defined in order to trigger an action when pages are switched. Pages are 0 indexed.
     public var didSwitchPages: ((Int) -> Void)?
     /// Can be set to allow or disallow user interaction with the page dot indicators. Defaults to false.
@@ -58,7 +62,7 @@ public class SimplePagedView: UIViewController {
         scrollView.alwaysBounceHorizontal = false
         return scrollView
     }()
-    public var pageControl: PageDotsView = {
+    fileprivate var pageControl: PageDotsView = {
         var pageControl = PageDotsView(count: 0, frame: .zero)
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl

@@ -1,9 +1,10 @@
 import UIKit
 
 public class PageDotsView: UIView {
+    let currentDot: Int
+
     private var dots: [UIView] = []
     private var dotCount: Int
-    private let currentDot: Int
     private let dotSize: CGFloat
     private let dotColor: UIColor
     private let currentDotColor: UIColor
