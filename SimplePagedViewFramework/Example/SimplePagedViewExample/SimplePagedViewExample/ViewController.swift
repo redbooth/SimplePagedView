@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         let orange = UIView()
         orange.backgroundColor = .orange
 
-        let dotImages = [1: #imageLiteral(resourceName: "add")]
+        let dotImages = [-1: #imageLiteral(resourceName: "add")]
 
         let pagedView = SimplePagedView(
             indicatorColor: .cyan,
@@ -43,6 +43,5 @@ class ViewController: UIViewController {
             ]
         }
     }
-
 }
 

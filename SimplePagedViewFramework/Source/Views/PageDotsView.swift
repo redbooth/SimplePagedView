@@ -105,8 +105,12 @@ private extension PageDotsView {
     ) -> [UIView] {
         self.addSubview(dotContainer)
 
+        let adjustedImageIndices = imageIndices.reduce(into: [Int: UIImage]()) { (result, keyValue) in
+            result[keyValue.key < 0 ? count + keyValue.key : keyValue.key] = keyValue.value
+        }
+
         return (0..<count).map { index in
-            if let image = imageIndices[index] {
+            if let image = adjustedImageIndices[index] {
                 let imageView = prepareImageDot(
                     image: image,
                     index: index,
