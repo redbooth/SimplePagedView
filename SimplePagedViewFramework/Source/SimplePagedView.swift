@@ -3,14 +3,14 @@ import UIKit
 public class SimplePagedView: UIViewController {
 
     // MARK: - Properties
-    public static let defaultPageControlConstraints: (SimplePagedView) -> ([NSLayoutConstraint])
-        = { (pagedViewController: SimplePagedView) in
+    public static let defaultPageControlConstraints: (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
+        = { (dotsView: PageDotsView, pagedViewController: SimplePagedView) in
             return [
-                pagedViewController.pageControl.bottomAnchor.constraint(
+                dotsView.bottomAnchor.constraint(
                     equalTo: pagedViewController.scrollView.bottomAnchor,
                     constant: Constants.pageControllerSpacing
                 ),
-                pagedViewController.pageControl.centerXAnchor.constraint(
+                dotsView.centerXAnchor.constraint(
                     equalTo: pagedViewController.view.centerXAnchor
                 ),
             ]
@@ -27,7 +27,7 @@ public class SimplePagedView: UIViewController {
         return scrollingView
     }()
     fileprivate var innerPages: [UIView]!
-    fileprivate let pageControlConstraints: (SimplePagedView) -> ([NSLayoutConstraint])
+    fileprivate let pageControlConstraints: (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
     fileprivate let initialPage: Int
     fileprivate var didInit = false
     fileprivate let dotSize: CGFloat
@@ -61,7 +61,7 @@ public class SimplePagedView: UIViewController {
         pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
-        pageControlConstraints: @escaping (SimplePagedView) -> ([NSLayoutConstraint])
+        pageControlConstraints: @escaping (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: UIView...
     ) {
@@ -87,7 +87,7 @@ public class SimplePagedView: UIViewController {
         pageControlBackgroundColor: UIColor = .clear,
         initialPage: Int = 0,
         dotSize: CGFloat = 7,
-        pageControlConstraints: @escaping (SimplePagedView) -> ([NSLayoutConstraint])
+        pageControlConstraints: @escaping (PageDotsView, SimplePagedView) -> ([NSLayoutConstraint])
             = SimplePagedView.defaultPageControlConstraints,
         with views: [UIView]
     ) {
@@ -112,16 +112,12 @@ public class SimplePagedView: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func loadView() {
-        super.loadView()
+    override public func viewDidLoad() {
+        super.viewDidLoad()
 
         self.setupSubviews()
         self.setupConstraints()
         self.scrollView.delegate = self
-    }
-
-    override public func viewDidLoad() {
-        super.viewDidLoad()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -186,11 +182,14 @@ public class SimplePagedView: UIViewController {
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
             animated: animated
         )
-        pageControl = try! pageControl.moveTo(index: page)
-//        self.viewDidLayoutSubviews()
+
+        let newPageControl = try! pageControl.moveTo(index: page)
+
+        self.replace(subview: self.pageControl, with: newPageControl, constraints: self.pageControlConstraints)
     }
 
     @objc func panned(sender: UIPanGestureRecognizer) {
+        print("panned")
         let cgNumberOfPages: CGFloat = CGFloat(self.innerPages.count)
         var page: Int = Int(floor(Double((sender.location(in: self.view).x/pageControl.frame.width) * cgNumberOfPages)))
 
@@ -301,7 +300,7 @@ fileprivate extension SimplePagedView {
         NSLayoutConstraint.activate(
             scrollViewConstraints,
             innerViewConstraints,
-            self.pageControlConstraints(self),
+            self.pageControlConstraints(self.pageControl, self),
             pageConstraints
         )
     }
@@ -321,20 +320,24 @@ fileprivate extension SimplePagedView {
 extension SimplePagedView: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-        self.pageControl = try! self.pageControl.moveTo(index: page)
+        let newPageControl = try! self.pageControl.moveTo(index: page)
+
+        self.replace(subview: self.pageControl, with: newPageControl, constraints: self.pageControlConstraints)
 
         self.didSwitchPages?(page)
-        self.viewDidLayoutSubviews()
-
-//        if let lastPageIndicator = self.lastPageIndicator,
-//            self.pageControl.currentPage == self.pageControl.numberOfPages - 1 {
-//            self.lastPageIndicator?.image = lastPageIndicator.image?.tint(
-//                with: self.pageControl.currentPageIndicatorTintColor!
-//            )
-//        }
     }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.viewDidLayoutSubviews()
+    }
+
+    func replace(subview: PageDotsView, with other: PageDotsView, constraints: (PageDotsView, SimplePagedView) -> [NSLayoutConstraint]) {
+        let newConstraints = constraints(other, self)
+        subview.removeFromSuperview()
+
+        self.view.addSubview(other)
+        NSLayoutConstraint.activate(newConstraints)
+
+        self.pageControl = other
     }
 }
