@@ -36,6 +36,9 @@ public class PageDotsView: UIView {
 
         super.init(frame: frame)
 
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.accessibilityIdentifier = "PageDotsView"
+
         self.dots = setupViews(
             count: count,
             dotColor: dotColor,

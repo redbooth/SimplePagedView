@@ -31,15 +31,16 @@ class ViewController: UIViewController {
             with: green, red, orange
         )
         pagedView.pageIndicatorIsInteractive = true
+        pagedView.translatesAutoresizingMaskIntoConstraints = false
 
-        self.add(pagedView) { (child) -> [NSLayoutConstraint] in
-            return [
-                child.topAnchor.constraint(equalTo: view.topAnchor),
-                child.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                child.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                child.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-            ]
-        }
+        self.view.addSubview(pagedView)
+
+        NSLayoutConstraint.activate([
+            pagedView.topAnchor.constraint(equalTo: view.topAnchor),
+            pagedView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            pagedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pagedView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 }
 
