@@ -11,7 +11,6 @@
 		B2C6871421C191F2000031AB /* SimplePagedViewFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6871321C191F2000031AB /* SimplePagedViewFrameworkTests.swift */; };
 		B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872021C19217000031AB /* NSLayoutConstraint.swift */; };
 		B2C6872921C19218000031AB /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872121C19217000031AB /* UIImage.swift */; };
-		B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */; };
 		B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872521C19218000031AB /* SimplePagedView.swift */; };
 		B2C6873121C1AE10000031AB /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6873021C1AE10000031AB /* UIViewController.swift */; };
 		B2C6898421C342D5000031AB /* PageDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6898321C342D5000031AB /* PageDotsView.swift */; };
@@ -44,7 +43,6 @@
 		B2C6871521C191F2000031AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2C6872021C19217000031AB /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		B2C6872121C19217000031AB /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
-		B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternallyInteractiveUIView.swift; sourceTree = "<group>"; };
 		B2C6872521C19218000031AB /* SimplePagedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePagedView.swift; sourceTree = "<group>"; };
 		B2C6873021C1AE10000031AB /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		B2C6898321C342D5000031AB /* PageDotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDotsView.swift; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 		B2C6872321C19217000031AB /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				B2C6872421C19217000031AB /* ExternallyInteractiveUIView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -302,7 +299,6 @@
 				B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */,
 				B2C689B221CA12E0000031AB /* DotView.swift in Sources */,
 				B2C6898421C342D5000031AB /* PageDotsView.swift in Sources */,
-				B2C6872B21C19218000031AB /* ExternallyInteractiveUIView.swift in Sources */,
 				B2C6872C21C19218000031AB /* SimplePagedView.swift in Sources */,
 				B2C6872921C19218000031AB /* UIImage.swift in Sources */,
 				B2C6873121C1AE10000031AB /* UIViewController.swift in Sources */,
