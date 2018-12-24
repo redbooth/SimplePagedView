@@ -3,17 +3,16 @@ import UIKit
 public class SimplePagedView: UIView {
 
     // MARK: - Properties
-    public static let defaultPageControlConstraints: (UIView, SimplePagedView) -> ([NSLayoutConstraint])
-        = { (dotsView: UIView, pagedViewController: SimplePagedView) in
-            return [
-                dotsView.bottomAnchor.constraint(equalTo: pagedViewController.scrollView.bottomAnchor),
-                dotsView.centerXAnchor.constraint(
-                    equalTo: pagedViewController.centerXAnchor
-                ),
-                dotsView.leadingAnchor.constraint(equalTo: pagedViewController.leadingAnchor),
-                dotsView.trailingAnchor.constraint(equalTo: pagedViewController.trailingAnchor),
-                dotsView.heightAnchor.constraint(equalToConstant: 44)
-            ]
+    public static func defaultPageControlConstraints(dotsView: UIView, pagedViewController: SimplePagedView) -> ([NSLayoutConstraint]) {
+        return [
+            dotsView.bottomAnchor.constraint(equalTo: pagedViewController.scrollView.bottomAnchor),
+            dotsView.centerXAnchor.constraint(
+                equalTo: pagedViewController.centerXAnchor
+            ),
+            dotsView.leadingAnchor.constraint(equalTo: pagedViewController.leadingAnchor),
+            dotsView.trailingAnchor.constraint(equalTo: pagedViewController.trailingAnchor),
+            dotsView.heightAnchor.constraint(equalToConstant: 44)
+        ]
     }
 
     fileprivate enum Constants {
@@ -51,6 +50,16 @@ public class SimplePagedView: UIView {
     public var pageIndicatorIsInteractive: Bool = false
     /// The last dot can in the page indicator can be replaced with an image by setting this property
     public var lastPageIndicator: UIImageView?
+    /// Executes whenever scrolling ends
+    public var didFinishScrolling: (() -> Void)?
+
+    public var isScrolling = false {
+        didSet {
+            if !isScrolling {
+                self.didFinishScrolling?()
+            }
+        }
+    }
 
     public var scrollView: UIScrollView = {
         var scrollView = UIScrollView()
@@ -141,12 +150,14 @@ public class SimplePagedView: UIView {
         super.willMove(toSuperview: newSuperview)
 
         self.setupGestures(pageControl: self.pageControlGestureView)
-
-        // Placing scrollTo within dispatch.main means that it's run after autolayout
-        DispatchQueue.main.async {
-            self.scrollTo(page: self.initialPage, animated: false)
-        }
     }
+
+    public override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+
+        self.scrollTo(page: initialPage, animated: false)
+    }
+
 
     /// Scrolls to the given page
     ///
@@ -154,6 +165,7 @@ public class SimplePagedView: UIView {
     ///   - page: 0 indexed page number
     ///   - animated: should the scrolling be animated
     public func scrollTo(page: Int, animated: Bool) {
+        self.scrollView.layoutIfNeeded()
         self.scrollView.setContentOffset(
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
             animated: animated
@@ -162,6 +174,7 @@ public class SimplePagedView: UIView {
         let newPageControl = try! pageControl.moveTo(index: page)
 
         self.replace(subview: self.pageControl, with: newPageControl, constraints: self.pageControlConstraints)
+        self.pageControl = newPageControl
     }
 
     @objc func panned(sender: UIPanGestureRecognizer) {
@@ -304,23 +317,47 @@ fileprivate extension SimplePagedView {
 
 // MARK: - UIScrollViewDelegate Methods
 extension SimplePagedView: UIScrollViewDelegate {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isScrolling = true
+    }
+
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate { scrollViewDidEndScrolling(scrollView) }
+    }
+
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        scrollViewDidEndScrolling(scrollView)
+    }
+
+    public func scrollViewDidEndScrolling(_ scrollView: UIScrollView) {
+        isScrolling = false
+    }
+
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        scrollViewDidEndScrolling(scrollView)
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         let newPageControl = try! self.pageControl.moveTo(index: page)
 
         self.replace(subview: self.pageControl, with: newPageControl, constraints: self.pageControlConstraints)
 
+        self.pageControl = newPageControl
+
         self.didSwitchPages?(page)
     }
+}
 
-    func replace(subview: PageDotsView, with other: PageDotsView, constraints: (PageDotsView, SimplePagedView) -> [NSLayoutConstraint]) {
-        let newConstraints = constraints(other, self)
+extension UIView {
+    public func replace<T: UIView>(
+        subview: UIView,
+        with other: UIView,
+        constraints: (_ child: UIView, _ parent: T) -> [NSLayoutConstraint]
+    ) {
+        let newConstraints = constraints(other, self as! T)
+        guard let subviewIndex = subview.superview?.subviews.firstIndex(of: subview) else { fatalError() }
         subview.removeFromSuperview()
+        self.insertSubview(other, at: subviewIndex)
 
-        self.insertSubview(other, belowSubview: self.pageControlGestureView)
         NSLayoutConstraint.activate(newConstraints)
-
-        self.pageControl = other
     }
 }
 
