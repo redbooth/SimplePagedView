@@ -2,6 +2,11 @@ import UIKit
 
 public class SimplePagedView: UIView {
 
+    public enum ScrollDirection {
+        case left
+        case right
+    }
+
     // MARK: - Properties
     public static func defaultPageControlConstraints(dotsView: UIView, pagedViewController: SimplePagedView) -> ([NSLayoutConstraint]) {
         return [
@@ -39,6 +44,7 @@ public class SimplePagedView: UIView {
     fileprivate let initialPage: Int
     fileprivate var didInit = false
     fileprivate let dotSize: CGFloat
+    fileprivate var lastContentOffset: CGFloat = 0
 
     public var currentPage: Int {
         return pageControl.currentDot
@@ -51,15 +57,18 @@ public class SimplePagedView: UIView {
     /// The last dot can in the page indicator can be replaced with an image by setting this property
     public var lastPageIndicator: UIImageView?
     /// Executes whenever scrolling ends
-    public var didFinishScrolling: (() -> Void)?
+    public var didFinishScrolling: ((ScrollDirection) -> Void)?
 
     public var isScrolling = false {
         didSet {
+            print("scroll", isScrolling)
             if !isScrolling {
-                self.didFinishScrolling?()
+                self.didFinishScrolling?(self.scrollDirection)
             }
         }
     }
+
+    public var scrollDirection: ScrollDirection = .left
 
     public var scrollView: UIScrollView = {
         var scrollView = UIScrollView()
@@ -148,12 +157,11 @@ public class SimplePagedView: UIView {
 
     public override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
-
-        self.setupGestures(pageControl: self.pageControlGestureView)
     }
 
     public override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
+        self.setupGestures(pageControlGestureHandler: self.pageControlGestureView)
 
         self.scrollTo(page: initialPage, animated: false)
     }
@@ -205,14 +213,14 @@ fileprivate extension SimplePagedView {
         return views.map { $0.translatesAutoresizingMaskIntoConstraints = false; return $0 }
     }
 
-    func setupGestures(pageControl: UIView) {
+    func setupGestures(pageControlGestureHandler: UIView) {
         if pageIndicatorIsInteractive {
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panned(sender:)))
 
             panGestureRecognizer.maximumNumberOfTouches = 1
             panGestureRecognizer.minimumNumberOfTouches = 1
 
-            pageControl.addGestureRecognizer(panGestureRecognizer)
+            pageControlGestureHandler.addGestureRecognizer(panGestureRecognizer)
         }
     }
 
@@ -344,6 +352,21 @@ extension SimplePagedView: UIScrollViewDelegate {
 
         self.didSwitchPages?(page)
     }
+
+    // direction detection borrowed from https://stackoverflow.com/a/53708900/3908168
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (abs(lastContentOffset - scrollView.contentOffset.x) > 20 ) {
+            lastContentOffset = scrollView.contentOffset.x;
+        }
+
+        if (lastContentOffset > scrollView.contentOffset.x) {
+            self.scrollDirection = .left
+        } else {
+            self.scrollDirection = .right
+        }
+
+        print(self.scrollDirection)
+    }
 }
 
 extension UIView {
@@ -367,7 +390,9 @@ extension SimplePagedView {
     /// We're using it because there are situations where we want the page
     /// indicator to be outside the page view
     override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard !clipsToBounds && !isHidden && alpha > 0 else { return nil }
+        guard !clipsToBounds && !isHidden && alpha > 0 else {
+            return nil
+        }
         for member in subviews.reversed() {
             let subPoint = member.convert(point, from: self)
             guard let result = member.hitTest(subPoint, with: event) else { continue }
