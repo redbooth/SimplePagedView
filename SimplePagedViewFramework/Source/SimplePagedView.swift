@@ -61,9 +61,9 @@ public class SimplePagedView: UIView {
 
     public var isScrolling = false {
         didSet {
-            print("scroll", isScrolling)
             if !isScrolling {
                 self.didFinishScrolling?(currentPage)
+                print("reached page", currentPage)
             }
         }
     }
@@ -342,7 +342,6 @@ extension SimplePagedView: UIScrollViewDelegate {
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        scrollViewDidEndScrolling(scrollView)
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         let newPageControl = try! self.pageControl.moveTo(index: page)
 
@@ -351,6 +350,8 @@ extension SimplePagedView: UIScrollViewDelegate {
         self.pageControl = newPageControl
 
         self.didSwitchPages?(page)
+
+        scrollViewDidEndScrolling(scrollView)
     }
 
     // direction detection borrowed from https://stackoverflow.com/a/53708900/3908168
@@ -364,8 +365,6 @@ extension SimplePagedView: UIScrollViewDelegate {
         } else {
             self.scrollDirection = .right
         }
-
-        print(self.scrollDirection)
     }
 }
 
