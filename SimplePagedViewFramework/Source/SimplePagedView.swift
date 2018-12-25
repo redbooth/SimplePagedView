@@ -57,13 +57,13 @@ public class SimplePagedView: UIView {
     /// The last dot can in the page indicator can be replaced with an image by setting this property
     public var lastPageIndicator: UIImageView?
     /// Executes whenever scrolling ends
-    public var didFinishScrolling: ((ScrollDirection) -> Void)?
+    public var didFinishScrolling: ((_ pageNumber: Int) -> Void)?
 
     public var isScrolling = false {
         didSet {
             print("scroll", isScrolling)
             if !isScrolling {
-                self.didFinishScrolling?(self.scrollDirection)
+                self.didFinishScrolling?(currentPage)
             }
         }
     }
