@@ -119,20 +119,12 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		B2C6872321C19217000031AB /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
 		B2C6872F21C1A8C8000031AB /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				B2C6898521C9805B000031AB /* Errors */,
 				B2C6872521C19218000031AB /* SimplePagedView.swift */,
 				B2C6898221C342B6000031AB /* Views */,
-				B2C6872321C19217000031AB /* Helpers */,
 				B2C6871F21C19217000031AB /* Extensions */,
 			);
 			path = Source;

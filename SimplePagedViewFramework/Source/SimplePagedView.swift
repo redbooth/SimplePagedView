@@ -35,6 +35,7 @@ public class SimplePagedView: UIView {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.accessibilityIdentifier = "DotGestureView"
+        view.isUserInteractionEnabled = true
 
         return view
     }()
@@ -53,7 +54,11 @@ public class SimplePagedView: UIView {
     /// Can be defined in order to trigger an action when pages are switched. Pages are 0 indexed.
     public var didSwitchPages: ((Int) -> Void)?
     /// Can be set to allow or disallow user interaction with the page dot indicators. Defaults to false.
-    public var pageIndicatorIsInteractive: Bool = false
+    public var pageIndicatorIsInteractive: Bool = false {
+        didSet {
+            self.setupGestures(pageControlGestureHandler: self.pageControlGestureView)
+        }
+    }
     /// The last dot can in the page indicator can be replaced with an image by setting this property
     public var lastPageIndicator: UIImageView?
     /// Executes whenever scrolling ends
@@ -127,7 +132,6 @@ public class SimplePagedView: UIView {
             = SimplePagedView.defaultPageControlConstraints,
         with views: [UIView]
     ) {
-
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
@@ -149,22 +153,24 @@ public class SimplePagedView: UIView {
         self.setupConstraints()
 
         self.didSwitchPages?(0)
+
+        self.isUserInteractionEnabled = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func willMove(toSuperview newSuperview: UIView?) {
-        super.willMove(toSuperview: newSuperview)
-    }
+//    public override func willMove(toSuperview newSuperview: UIView?) {
+//        super.willMove(toSuperview: newSuperview)
+//    }
 
     public override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
-        self.setupGestures(pageControlGestureHandler: self.pageControlGestureView)
 
         self.scrollTo(page: initialPage, animated: false)
     }
+
 
 
     /// Scrolls to the given page
@@ -221,6 +227,8 @@ fileprivate extension SimplePagedView {
             panGestureRecognizer.minimumNumberOfTouches = 1
 
             pageControlGestureHandler.addGestureRecognizer(panGestureRecognizer)
+        } else {
+            pageControlGestureHandler.gestureRecognizers = nil
         }
     }
 
