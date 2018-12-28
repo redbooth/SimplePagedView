@@ -43,7 +43,7 @@ public class SimplePagedView: UIView {
     fileprivate let pageControlConstraints: (UIView, SimplePagedView) -> ([NSLayoutConstraint])
 
     fileprivate let initialPage: Int
-    fileprivate var didInit = false
+    fileprivate var didScrollToInitialPage = false
     fileprivate let dotSize: CGFloat
     fileprivate var lastContentOffset: CGFloat = 0
 
@@ -161,25 +161,14 @@ public class SimplePagedView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-//    public override func willMove(toSuperview newSuperview: UIView?) {
-//        super.willMove(toSuperview: newSuperview)
-//    }
-
-    public override func willMove(toWindow newWindow: UIWindow?) {
-        super.willMove(toWindow: newWindow)
-
-        self.scrollTo(page: initialPage, animated: false)
-    }
-
-
-
     /// Scrolls to the given page
     ///
     /// - Parameters:
     ///   - page: 0 indexed page number
     ///   - animated: should the scrolling be animated
     public func scrollTo(page: Int, animated: Bool) {
-        self.layoutIfNeeded()
+        self.scrollView.setNeedsLayout()
+        self.scrollView.layoutIfNeeded()
         self.scrollView.setContentOffset(
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
             animated: animated
@@ -202,6 +191,15 @@ public class SimplePagedView: UIView {
             : page
 
         scrollTo(page: page, animated: false)
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if !didScrollToInitialPage {
+            scrollTo(page: self.initialPage, animated: false)
+            didScrollToInitialPage = true
+        }
     }
 }
 
