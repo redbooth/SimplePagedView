@@ -1,12 +1,6 @@
 import UIKit
 
 public class SimplePagedView: UIView {
-
-    public enum ScrollDirection {
-        case left
-        case right
-    }
-
     // MARK: - Properties
     public static func defaultPageControlConstraints(dotsView: UIView, pagedViewController: SimplePagedView) -> ([NSLayoutConstraint]) {
         return [
@@ -68,12 +62,9 @@ public class SimplePagedView: UIView {
         didSet {
             if !isScrolling {
                 self.didFinishScrolling?(currentPage)
-                print("reached page", currentPage)
             }
         }
     }
-
-    public var scrollDirection: ScrollDirection = .left
 
     public var scrollView: UIScrollView = {
         var scrollView = UIScrollView()
@@ -352,25 +343,11 @@ extension SimplePagedView: UIScrollViewDelegate {
         let newPageControl = try! self.pageControl.moveTo(index: page)
 
         self.replace(subview: self.pageControl, with: newPageControl, constraints: self.pageControlConstraints)
-
         self.pageControl = newPageControl
 
         self.didSwitchPages?(page)
 
         scrollViewDidEndScrolling(scrollView)
-    }
-
-    // direction detection borrowed from https://stackoverflow.com/a/53708900/3908168
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (abs(lastContentOffset - scrollView.contentOffset.x) > 20 ) {
-            lastContentOffset = scrollView.contentOffset.x;
-        }
-
-        if (lastContentOffset > scrollView.contentOffset.x) {
-            self.scrollDirection = .left
-        } else {
-            self.scrollDirection = .right
-        }
     }
 }
 

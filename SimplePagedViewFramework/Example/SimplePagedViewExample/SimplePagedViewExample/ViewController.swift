@@ -28,7 +28,7 @@ class ViewController: UIViewController {
             initialPage: 1,
             dotSize: 20,
             imageIndices: [-1: #imageLiteral(resourceName: "add")],
-            with: [green, red, orange]
+            with: green, red, orange
         )
         pagedView.pageIndicatorIsInteractive = true
         pagedView.translatesAutoresizingMaskIntoConstraints = false
