@@ -158,8 +158,6 @@ public class SimplePagedView: UIView {
     ///   - page: 0 indexed page number
     ///   - animated: should the scrolling be animated
     public func scrollTo(page: Int, animated: Bool) {
-        self.scrollView.setNeedsLayout()
-        self.scrollView.layoutIfNeeded()
         self.scrollView.setContentOffset(
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
             animated: animated
