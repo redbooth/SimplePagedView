@@ -179,7 +179,7 @@ public class SimplePagedView: UIView {
     ///   - page: 0 indexed page number
     ///   - animated: should the scrolling be animated
     public func scrollTo(page: Int, animated: Bool) {
-        self.scrollView.layoutIfNeeded()
+        self.layoutIfNeeded()
         self.scrollView.setContentOffset(
             CGPoint(x: CGFloat(Int(scrollView.frame.size.width) * page), y: 0),
             animated: animated
@@ -373,21 +373,6 @@ extension SimplePagedView: UIScrollViewDelegate {
         } else {
             self.scrollDirection = .right
         }
-    }
-}
-
-extension UIView {
-    public func replace<T: UIView>(
-        subview: UIView,
-        with other: UIView,
-        constraints: (_ child: UIView, _ parent: T) -> [NSLayoutConstraint]
-    ) {
-        let newConstraints = constraints(other, self as! T)
-        guard let subviewIndex = subview.superview?.subviews.firstIndex(of: subview) else { fatalError() }
-        subview.removeFromSuperview()
-        self.insertSubview(other, at: subviewIndex)
-
-        NSLayoutConstraint.activate(newConstraints)
     }
 }
 

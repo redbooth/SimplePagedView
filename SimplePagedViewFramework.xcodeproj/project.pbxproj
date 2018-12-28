@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B206EB0D21D69F1E00F39BD3 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B206EB0C21D69F1E00F39BD3 /* UIView.swift */; };
 		B2C6870F21C191F2000031AB /* SimplePagedViewFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2C6870521C191F2000031AB /* SimplePagedViewFramework.framework */; };
 		B2C6871421C191F2000031AB /* SimplePagedViewFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6871321C191F2000031AB /* SimplePagedViewFrameworkTests.swift */; };
 		B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C6872021C19217000031AB /* NSLayoutConstraint.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B206EB0C21D69F1E00F39BD3 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		B2C6870521C191F2000031AB /* SimplePagedViewFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimplePagedViewFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2C6870921C191F2000031AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2C6870E21C191F2000031AB /* SimplePagedViewFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimplePagedViewFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +117,7 @@
 				B2C6872021C19217000031AB /* NSLayoutConstraint.swift */,
 				B2C6872121C19217000031AB /* UIImage.swift */,
 				B2C6873021C1AE10000031AB /* UIViewController.swift */,
+				B206EB0C21D69F1E00F39BD3 /* UIView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B206EB0D21D69F1E00F39BD3 /* UIView.swift in Sources */,
 				B2C6898721C9806F000031AB /* DotsError.swift in Sources */,
 				B2C6872821C19218000031AB /* NSLayoutConstraint.swift in Sources */,
 				B2C689B221CA12E0000031AB /* DotView.swift in Sources */,
