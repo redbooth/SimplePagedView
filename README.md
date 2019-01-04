@@ -12,9 +12,10 @@ pod 'SimplePagedView'
 
 ## Usage
 
+### Programmatic setup
 ```swift
 // Create a PagedViewController by providing it with a view for each page you'd like it to contain
-let pagedViewController = PagedViewController(with:
+let simplePagedView = SimplePagedView(with:
     LogoView(presenter: welcomePresenter),
     CardPageView(image: ThemeManager.Images.welcomeTourSlide1,
                         subtitle: "Complete and resolve tasks on the go"),
@@ -24,14 +25,5 @@ let pagedViewController = PagedViewController(with:
                         subtitle: "Add files and pictures in seconds")
 )
 
-// Add the pagedViewController as a child view controller
-self.add(pagedViewController) { (childView) -> [NSLayoutConstraint] in
-    // Return an array of constraints to apply to the paged view
-    return [
-        childView.topAnchor.constraint(equalTo: view.readableContentGuide.topAnchor),
-        childView.leadingAnchor.constraint(equalTo: view.readableContentGuide.leadingAnchor),
-        childView.trailingAnchor.constraint(equalTo: view.readableContentGuide.trailingAnchor),
-        childView.bottomAnchor.constraint(equalTo: view.readableContentGuide.bottomAnchor)
-    ]
-}
+// Add as subview and setup constraints/frame
 ```

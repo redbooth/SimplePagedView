@@ -1,19 +1,17 @@
 import UIKit
 
-public class SimplePagedView: UIViewController {
-
+public class SimplePagedView: UIView {
     // MARK: - Properties
-    public static let defaultPageControlConstraints: (UIView, SimplePagedView) -> ([NSLayoutConstraint])
-        = { (dotsView: UIView, pagedViewController: SimplePagedView) in
-            return [
-                dotsView.bottomAnchor.constraint(equalTo: pagedViewController.scrollView.bottomAnchor),
-                dotsView.centerXAnchor.constraint(
-                    equalTo: pagedViewController.view.centerXAnchor
-                ),
-                dotsView.leadingAnchor.constraint(equalTo: pagedViewController.view.leadingAnchor),
-                dotsView.trailingAnchor.constraint(equalTo: pagedViewController.view.trailingAnchor),
-                dotsView.heightAnchor.constraint(equalToConstant: 44)
-            ]
+    public static func defaultPageControlConstraints(dotsView: UIView, pagedViewController: SimplePagedView) -> ([NSLayoutConstraint]) {
+        return [
+            dotsView.bottomAnchor.constraint(equalTo: pagedViewController.scrollView.bottomAnchor),
+            dotsView.centerXAnchor.constraint(
+                equalTo: pagedViewController.centerXAnchor
+            ),
+            dotsView.leadingAnchor.constraint(equalTo: pagedViewController.leadingAnchor),
+            dotsView.trailingAnchor.constraint(equalTo: pagedViewController.trailingAnchor),
+            dotsView.heightAnchor.constraint(equalToConstant: 44)
+        ]
     }
 
     fileprivate enum Constants {
@@ -31,6 +29,7 @@ public class SimplePagedView: UIViewController {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.accessibilityIdentifier = "DotGestureView"
+        view.isUserInteractionEnabled = true
 
         return view
     }()
@@ -38,8 +37,9 @@ public class SimplePagedView: UIViewController {
     fileprivate let pageControlConstraints: (UIView, SimplePagedView) -> ([NSLayoutConstraint])
 
     fileprivate let initialPage: Int
-    fileprivate var didInit = false
+    fileprivate var didScrollToInitialPage = false
     fileprivate let dotSize: CGFloat
+    fileprivate var lastContentOffset: CGFloat = 0
 
     public var currentPage: Int {
         return pageControl.currentDot
@@ -48,9 +48,23 @@ public class SimplePagedView: UIViewController {
     /// Can be defined in order to trigger an action when pages are switched. Pages are 0 indexed.
     public var didSwitchPages: ((Int) -> Void)?
     /// Can be set to allow or disallow user interaction with the page dot indicators. Defaults to false.
-    public var pageIndicatorIsInteractive: Bool = false
+    public var pageIndicatorIsInteractive: Bool = false {
+        didSet {
+            self.setupGestures(pageControlGestureHandler: self.pageControlGestureView)
+        }
+    }
     /// The last dot can in the page indicator can be replaced with an image by setting this property
     public var lastPageIndicator: UIImageView?
+    /// Executes whenever scrolling ends
+    public var didFinishScrolling: ((_ pageNumber: Int) -> Void)?
+
+    public var isScrolling = false {
+        didSet {
+            if !isScrolling {
+                self.didFinishScrolling?(currentPage)
+            }
+        }
+    }
 
     public var scrollView: UIScrollView = {
         var scrollView = UIScrollView()
@@ -80,7 +94,7 @@ public class SimplePagedView: UIViewController {
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
-        super.init(nibName: nil, bundle: nil)
+        super.init(frame: .zero)
         self.innerPages = setupInnerPages(for: views)
 
         self.pageControl = setupPageDotsView(
@@ -91,6 +105,13 @@ public class SimplePagedView: UIViewController {
             currentDot: initialPage,
             imageIndices: imageIndices
         )
+
+        self.scrollView.delegate = self
+
+        self.setupSubviews()
+        self.setupConstraints()
+
+        self.didSwitchPages?(0)
     }
 
     public init(
@@ -102,11 +123,10 @@ public class SimplePagedView: UIViewController {
             = SimplePagedView.defaultPageControlConstraints,
         with views: [UIView]
     ) {
-
         self.pageControlConstraints = pageControlConstraints
         self.initialPage = initialPage
         self.dotSize = dotSize
-        super.init(nibName: nil, bundle: nil)
+        super.init(frame: .zero)
         self.innerPages = setupInnerPages(for: views)
 
         self.pageControl = setupPageDotsView(
@@ -117,28 +137,19 @@ public class SimplePagedView: UIViewController {
             currentDot: initialPage,
             imageIndices: imageIndices
         )
+
+        self.scrollView.delegate = self
+
+        self.setupSubviews()
+        self.setupConstraints()
+
+        self.didSwitchPages?(0)
+
+        self.isUserInteractionEnabled = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.setupSubviews()
-        self.setupConstraints()
-        self.scrollView.delegate = self
-    }
-
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        self.didSwitchPages?(0)
-
-        self.setupGestures(pageControl: self.pageControlGestureView)
-        scrollTo(page: self.initialPage, animated: false)
-        self.viewDidLayoutSubviews()
     }
 
     /// Scrolls to the given page
@@ -155,11 +166,12 @@ public class SimplePagedView: UIViewController {
         let newPageControl = try! pageControl.moveTo(index: page)
 
         self.replace(subview: self.pageControl, with: newPageControl, constraints: self.pageControlConstraints)
+        self.pageControl = newPageControl
     }
 
     @objc func panned(sender: UIPanGestureRecognizer) {
         let cgNumberOfPages: CGFloat = CGFloat(self.innerPages.count)
-        var page: Int = Int(floor(Double((sender.location(in: self.view).x/pageControl.frame.width) * cgNumberOfPages)))
+        var page: Int = Int(floor(Double((sender.location(in: self).x/pageControl.frame.width) * cgNumberOfPages)))
 
         page = (page >= self.innerPages.count)
             ? self.innerPages.count - 1
@@ -168,6 +180,15 @@ public class SimplePagedView: UIViewController {
             : page
 
         scrollTo(page: page, animated: false)
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if !didScrollToInitialPage {
+            scrollTo(page: self.initialPage, animated: false)
+            didScrollToInitialPage = true
+        }
     }
 }
 
@@ -185,45 +206,44 @@ fileprivate extension SimplePagedView {
         return views.map { $0.translatesAutoresizingMaskIntoConstraints = false; return $0 }
     }
 
-    func setupGestures(pageControl: UIView) {
+    func setupGestures(pageControlGestureHandler: UIView) {
         if pageIndicatorIsInteractive {
             let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panned(sender:)))
 
             panGestureRecognizer.maximumNumberOfTouches = 1
             panGestureRecognizer.minimumNumberOfTouches = 1
 
-            pageControl.addGestureRecognizer(panGestureRecognizer)
+            pageControlGestureHandler.addGestureRecognizer(panGestureRecognizer)
+        } else {
+            pageControlGestureHandler.gestureRecognizers = nil
         }
     }
 
     func setupSubviews() {
-        let customView = ExternallyInteractiveUIView(frame: self.view.frame)
-        self.view = customView
-
-        self.view.addSubview(scrollView)
+        self.addSubview(scrollView)
         self.scrollView.addSubview(scrollContentView)
 
         for page in innerPages {
             scrollContentView.addSubview(page)
         }
 
-        self.view.addSubview(pageControl)
-        self.view.addSubview(pageControlGestureView)
+        self.addSubview(pageControl)
+        self.addSubview(pageControlGestureView)
     }
 
     // swiftlint:disable next function_body_length
     func setupConstraints() {
         let scrollViewConstraints = [
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
 
         let innerViewConstraints = [
             scrollContentView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
-            scrollContentView.heightAnchor.constraint(equalTo: view.heightAnchor),
-            scrollContentView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CGFloat(innerPages.count)),
+            scrollContentView.heightAnchor.constraint(equalTo: heightAnchor),
+            scrollContentView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: CGFloat(innerPages.count)),
             scrollContentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             scrollContentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             scrollContentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
@@ -238,8 +258,8 @@ fileprivate extension SimplePagedView {
             var bottomConstraints: [NSLayoutConstraint] = []
 
             for page in innerPages {
-                widthConstraints.append(page.widthAnchor.constraint(equalTo: view.widthAnchor))
-                heightConstraints.append(page.heightAnchor.constraint(equalTo: view.heightAnchor))
+                widthConstraints.append(page.widthAnchor.constraint(equalTo: widthAnchor))
+                heightConstraints.append(page.heightAnchor.constraint(equalTo: heightAnchor))
             }
 
             leadingEdgeConstraints.append(innerPages[0].leadingAnchor.constraint(equalTo: scrollView.leadingAnchor))
@@ -291,8 +311,6 @@ fileprivate extension SimplePagedView {
             imageIndices: imageIndices,
             frame: .zero
         )
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.accessibilityIdentifier = "PageDotsView"
 
         view.frame = CGRect(x: 0, y: 0, width: view.intrinsicContentSize.width, height: view.intrinsicContentSize.height)
 
@@ -302,22 +320,49 @@ fileprivate extension SimplePagedView {
 
 // MARK: - UIScrollViewDelegate Methods
 extension SimplePagedView: UIScrollViewDelegate {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isScrolling = true
+    }
+
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate { scrollViewDidEndScrolling(scrollView) }
+    }
+
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        scrollViewDidEndScrolling(scrollView)
+    }
+
+    public func scrollViewDidEndScrolling(_ scrollView: UIScrollView) {
+        isScrolling = false
+    }
+
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         let newPageControl = try! self.pageControl.moveTo(index: page)
 
         self.replace(subview: self.pageControl, with: newPageControl, constraints: self.pageControlConstraints)
+        self.pageControl = newPageControl
 
         self.didSwitchPages?(page)
+
+        scrollViewDidEndScrolling(scrollView)
     }
+}
 
-    func replace(subview: PageDotsView, with other: PageDotsView, constraints: (PageDotsView, SimplePagedView) -> [NSLayoutConstraint]) {
-        let newConstraints = constraints(other, self)
-        subview.removeFromSuperview()
-
-        self.view.insertSubview(other, belowSubview: self.pageControlGestureView)
-        NSLayoutConstraint.activate(newConstraints)
-
-        self.pageControl = other
+extension SimplePagedView {
+    /// Gestures won't be recognized on subviews that are outside the bounds of a view
+    /// This subclass and override remedies that.
+    /// We're using it because there are situations where we want the page
+    /// indicator to be outside the page view
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard !clipsToBounds && !isHidden && alpha > 0 else {
+            return nil
+        }
+        for member in subviews.reversed() {
+            let subPoint = member.convert(point, from: self)
+            guard let result = member.hitTest(subPoint, with: event) else { continue }
+            return result
+        }
+        return nil
     }
 }

@@ -17,4 +17,8 @@ let pagedView = SimplePagedView(
     with: green, red, orange
 )
 
+pagedView.frame = CGRect(x: 0, y: 0, width: 350, height: 700)
+
+pagedView.pageIndicatorIsInteractive = true
+
 PlaygroundPage.current.liveView = pagedView
