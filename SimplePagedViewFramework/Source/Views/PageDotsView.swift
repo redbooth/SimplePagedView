@@ -148,6 +148,8 @@ private extension PageDotsView {
 
             if let previousDot = previousDot {
                 constraints.append(dot.leadingAnchor.constraint(equalTo: previousDot.trailingAnchor, constant: dotSize))
+            } else {
+                constraints.append(dot.leadingAnchor.constraint(equalTo: dotContainer.leadingAnchor))
             }
 
             previousDot = dot
@@ -174,6 +176,7 @@ private extension PageDotsView {
         let frame = CGRect(x: 0, y: 0, width: dotSize, height: dotSize)
         let color = index == self.currentDot ? currentDotColor : dotColor
         let dot: DotView = DotView(frame: frame, mainColor: color)
+        dot.backgroundColor = .clear
 
         dot.accessibilityIdentifier = "DotAt\(index)"
 
